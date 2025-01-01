@@ -1,0 +1,78 @@
+An image smoother is a filter of the size 3 x 3 that can be applied to each cell of an image by rounding down the average of the cell and the eight surrounding cells (i.e., the average of the nine cells in the blue smoother). If one or more of the surrounding cells of a cell is not present, we do not consider it in the average (i.e., the average of the four cells in the red smoother).
+
+
+code starts from here;
+
+class Solution {
+    public int[][] imageSmoother(int[][] img) {
+        int m = img.length;    
+        int n = img[0].length; 
+        int[][] result = new int[m][n];
+        
+        
+        int[][] directions = {
+            {-1, -1}, {-1, 0}, {-1, 1},
+            { 0, -1}, { 0, 0}, { 0, 1},
+            { 1, -1}, { 1, 0}, { 1, 1}
+        };
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                int sum = 0;    
+                int count = 0; 
+
+                
+                for (int[] dir : directions) {
+                    int x = i + dir[0];
+                    int y = j + dir[1];
+                    
+                    
+                    if (x >= 0 && x < m && y >= 0 && y < n) {
+                        sum += img[x][y];
+                        count++;
+                    }
+                }
+                
+               
+                result[i][j] = sum / count;
+            }
+        }
+        
+        return result;
+    }
+}
+
+
+public class Main {
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        
+        
+        int[][] img1 = {
+            {1, 1, 1},
+            {1, 0, 1},
+            {1, 1, 1}
+        };
+        int[][] result1 = solution.imageSmoother(img1);
+        printMatrix(result1);  
+
+        
+        int[][] img2 = {
+            {100, 200, 100},
+            {200, 50, 200},
+            {100, 200, 100}
+        };
+        int[][] result2 = solution.imageSmoother(img2);
+        printMatrix(result2);  
+    }
+
+    
+    private static void printMatrix(int[][] matrix) {
+        for (int[] row : matrix) {
+            for (int val : row) {
+                System.out.print(val + " ");
+            }
+            System.out.println();
+        }
+    }
+}
