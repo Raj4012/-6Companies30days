@@ -1,0 +1,51 @@
+You are given an integer array prices where prices[i] is the price of a given stock on the ith day, and an integer k.
+
+Find the maximum profit you can achieve. You may complete at most k transactions: i.e. you may buy at most k times and sell at most k times.
+
+Note: You may not engage in multiple transactions simultaneously (i.e., you must sell the stock before you buy again).
+
+ 
+
+Example 1:
+
+Input: k = 2, prices = [2,4,1]
+Output: 2
+Explanation: Buy on day 1 (price = 2) and sell on day 2 (price = 4), profit = 4-2 = 2.
+Example 2:
+
+Input: k = 2, prices = [3,2,6,5,0,3]
+Output: 7
+Explanation: Buy on day 2 (price = 2) and sell on day 3 (price = 6), profit = 6-2 = 4. Then buy on day 5 (price = 0) and sell on day 6 (price = 3), profit = 3-0 = 3.
+
+Code Starts from here
+
+class Solution {
+    public int maxProfit(int k, int[] prices) {
+        int n=prices.length;
+        int[][][] dp = new int[n][2][k+1];   
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < 2; j++) {
+                Arrays.fill(dp[i][j], -1);
+            }
+        }
+        return find(prices,0,0,k,dp); 
+    }
+    
+    public int find(int[] arr,int index,int buy,int count,int[][][] dp){
+        if(index==arr.length || count==0) return 0;
+        if(dp[index][buy][count]!=-1) return dp[index][buy][count];
+        int take=0;
+        int not_take=0;
+        if(buy==0){
+            take=-arr[index]+find(arr,index+1,1,count,dp);            
+            not_take=find(arr,index+1,buy,count,dp);                 
+        }
+        else{
+            take=arr[index]+find(arr,index+1,0,count-1,dp);           
+            not_take=find(arr,index+1,buy,count,dp);                  
+        }
+        
+        return dp[index][buy][count]=Math.max(take,not_take);
+        
+    }
+}
