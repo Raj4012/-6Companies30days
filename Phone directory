@@ -1,0 +1,64 @@
+Given a list of contacts contact[] of length n where each contact is a string which exist in a phone directory and a query string s. The task is to implement a search query for the phone directory. Run a search query for each prefix p of the query string s (i.e. from  index 1 to |s|) that prints all the distinct contacts which have the same prefix as p in lexicographical increasing order. Please refer the explanation part for better understanding.
+Note: If there is no match between query and contacts, print "0".
+
+Example 1:
+
+Input: 
+n = 3
+contact[] = {"geeikistest", "geeksforgeeks", 
+"geeksfortest"}
+s = "geeips"
+Output:
+geeikistest geeksforgeeks geeksfortest
+geeikistest geeksforgeeks geeksfortest
+geeikistest geeksforgeeks geeksfortest
+geeikistest
+0
+0
+Explaination: By running the search query on 
+contact list for "g" we get: "geeikistest", 
+"geeksforgeeks" and "geeksfortest".
+By running the search query on contact list 
+for "ge" we get: "geeikistest" "geeksforgeeks"
+and "geeksfortest".
+By running the search query on contact list 
+for "gee" we get: "geeikistest" "geeksforgeeks"
+and "geeksfortest".
+By running the search query on contact list 
+for "geei" we get: "geeikistest".
+No results found for "geeip", so print "0". 
+No results found for "geeips", so print "0".
+
+Code starts from here;
+
+class Solution {
+    static ArrayList<ArrayList<String>> displayContacts(int n, String[] contact, String s) {
+       
+        TreeSet<String> sortedContacts = new TreeSet<>(Arrays.asList(contact));
+        
+        ArrayList<ArrayList<String>> result = new ArrayList<>();
+
+        
+        for (int i = 1; i <= s.length(); i++) {
+            String prefix = s.substring(0, i);
+
+            
+            ArrayList<String> matches = new ArrayList<>();
+            for (String entry : sortedContacts) {
+                if (entry.startsWith(prefix)) {
+                    matches.add(entry);
+                } else if (entry.compareTo(prefix) > 0) {
+                    break; 
+                }
+            }
+
+            
+            if (matches.isEmpty()) {
+                matches.add("0");
+            }
+            result.add(matches);
+        }
+
+        return result;
+    }
+}
