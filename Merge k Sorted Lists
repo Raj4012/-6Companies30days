@@ -1,0 +1,111 @@
+You are given an array of k linked-lists lists, each linked-list is sorted in ascending order.
+
+Merge all the linked-lists into one sorted linked-list and return it.
+
+ 
+
+Example 1:
+
+Input: lists = [[1,4,5],[1,3,4],[2,6]]
+Output: [1,1,2,3,4,4,5,6]
+Explanation: The linked-lists are:
+[
+  1->4->5,
+  1->3->4,
+  2->6
+]
+merging them into one sorted list:
+1->1->2->3->4->4->5->6
+Example 2:
+
+Input: lists = []
+Output: []
+Example 3:
+
+Input: lists = [[]]
+Output: []
+
+Code starts from here;;
+/*
+    Given array of k sorted linked-lists, merge all into 1 sorted list
+    Ex. lists = [[1,4,5],[1,3,4],[2,6]] -> [1,1,2,3,4,4,5,6]
+
+    Min heap -> optimize space w/ divide-and-conquer, merge 2 each time
+
+    Time: O(n log k)
+    Space: O(n) -> O(1)
+*/
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+
+// class Solution {
+// public:
+//     ListNode* mergeKLists(vector<ListNode*>& lists) {
+//         priority_queue<int, vector<int>, greater<int>> pq;
+//         for (int i = 0; i < lists.size(); i++) {
+//             ListNode* node = lists[i];
+//             while (node != NULL) {
+//                 pq.push(node->val);
+//                 node = node->next;
+//             }
+//         }
+//         if (pq.empty()) {
+//             return NULL;
+//         }
+//         ListNode* node = new ListNode(pq.top());
+//         pq.pop();
+//         ListNode* head = node;
+//         while (!pq.empty()) {
+//             node->next = new ListNode(pq.top());
+//             pq.pop();
+//             node = node->next;
+//         }
+//         return head;
+//     }
+// };
+
+class Solution {
+    public ListNode mergeKLists(ListNode[] lists) {
+        if (lists == null || lists.length == 0) {
+            return null;
+        }
+        
+        
+        PriorityQueue<ListNode> pq = new PriorityQueue<>((a, b) -> a.val - b.val);
+        
+        
+        for (ListNode list : lists) {
+            if (list != null) {
+                pq.offer(list);
+            }
+        }
+        
+      
+        ListNode dummy = new ListNode(0);
+        ListNode tail = dummy;
+        
+        
+        while (!pq.isEmpty()) {
+            
+            ListNode minNode = pq.poll();
+            tail.next = minNode; 
+            tail = tail.next; 
+            
+            
+            if (minNode.next != null) {
+                pq.offer(minNode.next);
+            }
+        }
+        
+        return dummy.next; 
+    }
+}
